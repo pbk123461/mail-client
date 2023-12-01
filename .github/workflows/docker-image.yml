@@ -1,18 +1,18 @@
-FROM roundcube/roundcubemail:latest
+name: Docker Image CI
 
-RUN set -ex; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends \
-        git \
-    ; \
-    \
-    composer \
-        --working-dir=/usr/src/roundcubemail/ \
-        --prefer-dist \
-        --prefer-stable \
-        --update-no-dev \
-        --no-interaction \
-        --optimize-autoloader \
-        require \
-            johndoh/contextmenu \
-    ;
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build -t roundcubemail
